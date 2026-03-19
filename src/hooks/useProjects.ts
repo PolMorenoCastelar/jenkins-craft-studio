@@ -90,7 +90,7 @@ export function useProjects() {
           user_id: user!.id,
           name: `${project.name} (copia)`,
           description: project.description,
-          json_config: project.json_config as unknown as Record<string, unknown>,
+          json_config: project.json_config as any,
           generated_groovy: project.generated_groovy,
         }])
         .select()
