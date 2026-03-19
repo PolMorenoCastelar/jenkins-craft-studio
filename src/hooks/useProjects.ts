@@ -19,7 +19,7 @@ export function useProjects() {
         .eq('user_id', user!.id)
         .order('updated_at', { ascending: false });
       if (error) throw error;
-      return data as Project[];
+      return (data ?? []) as unknown as Project[];
     },
     enabled: !!user,
   });
@@ -30,17 +30,17 @@ export function useProjects() {
       const groovy = generateGroovy(config);
       const { data, error } = await supabase
         .from('projects')
-        .insert({
+        .insert([{
           user_id: user!.id,
           name,
           description,
-          json_config: config,
+          json_config: config as unknown as Record<string, unknown>,
           generated_groovy: groovy,
-        })
+        }])
         .select()
         .single();
       if (error) throw error;
-      return data as Project;
+      return data as unknown as Project;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
@@ -50,13 +50,18 @@ export function useProjects() {
   });
 
   const updateProject = useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<Project> & { id: string }) => {
-      if (updates.json_config) {
-        updates.generated_groovy = generateGroovy(updates.json_config as PipelineConfig);
+    mutationFn: async ({ id, json_config, generated_groovy, ...rest }: Partial<Project> & { id: string }) => {
+      const updates: Record<string, unknown> = { ...rest, updated_at: new Date().toISOString() };
+      if (json_config) {
+        updates.json_config = json_config as unknown as Record<string, unknown>;
+        updates.generated_groovy = generateGroovy(json_config as PipelineConfig);
+      }
+      if (generated_groovy && !json_config) {
+        updates.generated_groovy = generated_groovy;
       }
       const { error } = await supabase
         .from('projects')
-        .update({ ...updates, updated_at: new Date().toISOString() })
+        .update(updates)
         .eq('id', id);
       if (error) throw error;
     },
@@ -81,13 +86,13 @@ export function useProjects() {
     mutationFn: async (project: Project) => {
       const { data, error } = await supabase
         .from('projects')
-        .insert({
+        .insert([{
           user_id: user!.id,
           name: `${project.name} (copia)`,
           description: project.description,
-          json_config: project.json_config,
+          json_config: project.json_config as unknown as Record<string, unknown>,
           generated_groovy: project.generated_groovy,
-        })
+        }])
         .select()
         .single();
       if (error) throw error;

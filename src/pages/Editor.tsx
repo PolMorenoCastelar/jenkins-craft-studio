@@ -35,8 +35,8 @@ export default function EditorPage() {
           navigate('/');
           return;
         }
-        setProject(data as Project);
-        setConfig(data.json_config as PipelineConfig);
+        setProject(data as unknown as Project);
+        setConfig(data.json_config as unknown as PipelineConfig);
         setLoading(false);
       });
   }, [id, navigate]);
