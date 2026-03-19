@@ -87,7 +87,7 @@ export default function Dashboard() {
       <div className="container py-8 space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Mis Proyectos T</h1>
+            <h1 className="text-2xl font-bold">Mis Proyectos </h1>
             <p className="text-sm text-muted-foreground">
               Gestiona tus pipelines de 
             </p>
