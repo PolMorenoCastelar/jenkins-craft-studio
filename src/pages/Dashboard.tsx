@@ -70,7 +70,7 @@ export default function Dashboard() {
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-2">
             <GitBranch className="h-5 w-5 text-primary" />
-            <span className="font-semibold text-foreground">JenkinsFlow Architect</span>
+            <span className="font-semibold text-foreground">Flow Architect</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground hidden sm:block">
@@ -87,9 +87,9 @@ export default function Dashboard() {
       <div className="container py-8 space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Mis Proyectos</h1>
+            <h1 className="text-2xl font-bold">Mis Proyectos T</h1>
             <p className="text-sm text-muted-foreground">
-              Gestiona tus pipelines de Jenkins
+              Gestiona tus pipelines de 
             </p>
           </div>
 
