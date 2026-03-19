@@ -1,10 +1,19 @@
 pipeline {
   agent any
 
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+  }
+
   stages {
-    stage('Checkout') {
+    stage('Validate files') {
       steps {
-        checkout scm
+        sh '''
+          test -f /opt/apps/jenkins-craft-studio/docker-compose.yml
+          test -f /opt/apps/jenkins-craft-studio/src/Dockerfile
+          test -f /opt/apps/jenkins-craft-studio/src/nginx.conf
+        '''
       }
     }
 
@@ -16,6 +25,14 @@ pipeline {
         '''
       }
     }
+
+    stage('Cleanup') {
+      steps {
+        sh '''
+          docker image prune -f
+        '''
+      }
+    }
   }
 
   post {
@@ -24,6 +41,9 @@ pipeline {
     }
     failure {
       echo 'El despliegue ha fallado'
+    }
+    always {
+      sh 'docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
     }
   }
 }
