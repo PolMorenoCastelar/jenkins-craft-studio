@@ -34,7 +34,7 @@ export function useProjects() {
           user_id: user!.id,
           name,
           description,
-          json_config: config as unknown as Record<string, unknown>,
+          json_config: config as any,
           generated_groovy: groovy,
         }])
         .select()
